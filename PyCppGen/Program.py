@@ -6,6 +6,7 @@ class Program:
     def __init__(self, sourceDirectory):
         self.classes = []
         self.sourceDir = sourceDirectory
+
     def add_class(self, klass):
         self.classes.append(klass)
 
@@ -16,6 +17,3 @@ class Program:
                 hppFile.write(klass.generate_header_code())
             with open(baseName + ".cpp", 'w') as cppFile:
                 cppFile.write(klass.generate_implementation_code())
-
-
-
