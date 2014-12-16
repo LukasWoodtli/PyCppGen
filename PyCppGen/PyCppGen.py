@@ -97,13 +97,14 @@ class CppMethod(CppFunction):
         self.modifier = modifier
 
     def generate_common_code(self):
-        return self.returnType + " " + self.name + \
+        return self.name + \
             "(" + ", ".join([arg for arg in self.arguments]) + ")"
 
     def generate_header_code(self):
         str = ""
         str += visibility_to_code(self.visibility)
         str += ": "
+        str += self.returnType + " "
         if self.virtuality != Virtuality.NON_VIRTUAL:
             str += "virtual "
         elif self.modifier == Modifier.STATIC:
@@ -118,14 +119,14 @@ class CppMethod(CppFunction):
         return str
 
     def generate_implementation_code(self, className):
-        str = ""
+        str = self.returnType + " "
         str += className + "::"
         str += self.generate_common_code()
         if self.modifier == Modifier.CONST:
             str += " const "
         if self.virtuality == Virtuality.PURE_VIRTUAL:
             str += " = 0"
-        str += "{\n"
+        str += "\n{\n"
         str += self.code
         str += "\n}\n"
         return str
@@ -211,6 +212,11 @@ class CppClass:
 
         return str
 
-    def generate_implementation_code(self):
-        return "\n".join([method.generate_implementation_code(self.name)
+    def generate_implementation_code(self, prefix):
+        str = ""
+        for include in self.includes:
+            str += '#include "' + include + '"\n'
+        str += '#include "' + prefix + self.name + '.hpp"\n'
+        str += "\n".join([method.generate_implementation_code(self.name)
                           for method in self.methods])
+        return str
