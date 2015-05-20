@@ -194,8 +194,12 @@ class CppParentClass:
 
 
 class CppClass:
-    def __init__(self, name, *parents):
+    def __init__(self, name, file_name = "", *parents):
         self.name = name
+        if file_name == "":
+            self.file_name = name
+        else:
+            self.file_name = file_name
         self.parents = []
         for parent in parents:
             self.parents.append(parent)

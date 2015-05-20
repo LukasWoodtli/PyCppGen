@@ -15,7 +15,7 @@ class Program:
         if not os.path.exists(self.sourceDir):
             os.makedirs(self.sourceDir)
         for klass in self.classes:
-            baseName = os.path.join(self.sourceDir, self.prefix + klass.name)
+            baseName = os.path.join(self.sourceDir, self.prefix + klass.file_name)
             with open(baseName + ".hpp", 'w') as hppFile:
                 hppFile.write(klass.generate_header_code())
             with open(baseName + ".cpp", 'w') as cppFile:
